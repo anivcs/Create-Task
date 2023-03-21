@@ -65,12 +65,13 @@ def calculate_grade():
     result_label = tk.Label(frame5, text=f"Final Grade: {final_grade:.2f}")
     frame5.pack()
     result_label.pack(side=LEFT)
-
+# Create a function to erase the data
 def erase_grade():
     grades.clear()
     weights.clear()
     mb.showinfo("Information", "Your grades have been cleared")
-    result_label.destroy()
+    final_grade= None
+    
 # Create labels and buttons for adding assignments and calculating the final grade
 info_label = tk.Label(frame1, text = "Welcome to Swift Grade Calculator. Please add your categories by clicking on 'add a catageory'.")
 frame1.pack()
