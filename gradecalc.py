@@ -53,6 +53,9 @@ def add_assignment():
 
 # Create a function to calculate the final grade
 def calculate_grade():
+    # Create global variables
+    global final_grade
+    global result_label
     # Calculate the total weight
     total_weight = sum(weights)
 
@@ -67,10 +70,15 @@ def calculate_grade():
     result_label.pack(side=LEFT)
 # Create a function to erase the data
 def erase_grade():
+    #Create Global Variables
+    global final_grade
+    global result_label
+    #Clear data
     grades.clear()
     weights.clear()
     mb.showinfo("Information", "Your grades have been cleared")
     final_grade= None
+    result_label.destroy()
     
 # Create labels and buttons for adding assignments and calculating the final grade
 info_label = tk.Label(frame1, text = "Welcome to Swift Grade Calculator. Please add your categories by clicking on 'add a catageory'.")
@@ -86,8 +94,12 @@ add_button.pack(side=LEFT)
 calculate_button = tk.Button(frame3, text="Calculate Final Grade", command=calculate_grade, width = 20, height = 1)
 frame3.pack()
 calculate_button.pack(side=LEFT)
-erase_button = tk.Button(frame4, text="Erase grade data", command=erase_grade, width = 20, height =1)
+erase_button = tk.Button(frame4, text="Clear", command=erase_grade, width = 20, height =1)
 frame4.pack()
 erase_button.pack(side=LEFT)
+final_grade = None
+result_label = tk.Label(frame5, text=" ")
+frame5.pack()
+result_label.pack(side=LEFT)
 # Start the main event loop
 window.mainloop()
