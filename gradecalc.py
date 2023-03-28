@@ -14,7 +14,7 @@ frame5 = Frame(window)
 # Create a list to store the grades and weights
 grades = []
 weights = []
-
+weight_labels = []
 # Create a function to add a new assignment
 def add_assignment():
     # Create a new window for the user to input the grade and weight
@@ -38,6 +38,10 @@ def add_assignment():
     name_entry.grid(row=2, column=1)
     # Create a function to add the grade and weight to the list
     def add_grade():
+        global window
+        global frame3
+        global grade_label
+        global weight_label
         try:
             grade = float(grade_entry.get())
             weight = float(weight_entry.get())
@@ -46,7 +50,12 @@ def add_assignment():
         grades.append(grade)
         weights.append(weight)
         new_window.destroy()
-
+        grade_label = tk.Label(frame3, text=f"Grade: {grade}")
+        grade_label.pack(side=LEFT)
+        frame3.pack()
+        weight_label = tk.Label(frame3, text=f"Weight: {weight}")
+        weight_label.pack(side=LEFT)
+        frame3.pack()
     # Create a button to add the grade and weight
     add_button = tk.Button(new_window, text="Add", command=add_grade)
     add_button.grid(row=3, column=0, columnspan=2)
@@ -73,12 +82,16 @@ def erase_grade():
     #Create Global Variables
     global final_grade
     global result_label
+    global grade_label
+    global weight_label
     #Clear data
     grades.clear()
     weights.clear()
     mb.showinfo("Information", "Your grades have been cleared")
     final_grade= None
     result_label.destroy()
+    grade_label.destroy()
+    weight_label.destroy()
     
 # Create labels and buttons for adding assignments and calculating the final grade
 info_label = tk.Label(frame1, text = "Welcome to Swift Grade Calculator. Please add your categories by clicking on 'add a catageory'.")
@@ -101,5 +114,11 @@ final_grade = None
 result_label = tk.Label(frame5, text=" ")
 frame5.pack()
 result_label.pack(side=LEFT)
+grade_label = tk.Label(frame3, text=" ")
+frame3.pack()
+grade_label.pack(side=LEFT)
+weight_label = tk.Label(frame3, text=" ")
+frame3.pack()
+weight_label.pack(side=LEFT)
 # Start the main event loop
 window.mainloop()
