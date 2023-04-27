@@ -140,21 +140,43 @@ assignment.pack(side='left', expand = True)
 
 
 def calculateGrade():
-    totalWeight = 0
-    totalPoint = 0
-    for weight in weights:
-        totalWeight += weight
-    for gradeNum, gradeDen, weight in zip(gradesNum, gradesDen, weights):
-        totalPoint += (gradeNum/gradeDen)*weight 
-        grade = round(totalPoint, 2)
-    if totalWeight != 100:
-        mb.showerror("Error!", f"The sum of the weights does not equal to 100. The total weight is {totalWeight}. ")
-    elif totalPoint < 0:
-        mb.showerror("Error!", "Grade cannot be negative")
-    else:
-        result = Label(head, text = f"Grade: {grade}")
-        result.pack()
-
+    calculationWindow = Toplevel(window)
+    infoLabel = Label(calculationWindow, text = "Select what type of calculation you want to do.")
+    infoLabel.grid(column = 0, row = 0)
+    weighted = Button(calculationWindow, text ="Weighted", command = lambda:calculate("Weighted"))
+    weighted.grid(column = 0, row = 1)
+    unweighted = Button(calculationWindow, text = "Unweighted", command = lambda:calculate("Unweighted"))
+    unweighted.grid(column = 0, row = 2)
+    close = Button(calculationWindow, text ="Close", command = lambda:calculate("Close"))
+    close.grid(column = 0, row = 3)
+    def calculate(type):
+        if type == "Weighted":
+            totalWeight = 0
+            totalPoint = 0
+            for weight in weights:
+                totalWeight += weight
+            for gradeNum, gradeDen, weight in zip(gradesNum, gradesDen, weights):
+                totalPoint += (gradeNum/gradeDen)*weight 
+                grade = round(totalPoint, 2)
+            if totalWeight != 100:
+                mb.showerror("Error!", f"The sum of the weights does not equal to 100. The total weight is {totalWeight}. ")
+            elif totalPoint < 0:
+                mb.showerror("Error!", "Grade cannot be negative")
+            else:
+                result = Label(head, text = f"Grade: {grade}")
+                result.pack()
+        elif type == "Unweighted":
+            totalGradeNum = 0
+            totalGradeDen = 0
+            for gradeNum in gradesNum:
+                totalGradeNum += gradeNum
+            for gradeDen in gradesDen:
+                totalGradeDen += gradeDen
+            grade = round((totalGradeNum/totalGradeDen)*100, 2) 
+            result = Label(head, text = f"Grade: {grade}")
+            result.pack()
+        else:
+            calculationWindow.destroy()
 
 calculate = Button(buttons, text="Calculate Overall Grade", command = calculateGrade)
 calculate.pack(side='left', expand = True)
