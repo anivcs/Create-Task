@@ -1,124 +1,163 @@
 import tkinter as tk
 from tkinter import messagebox as mb
 from tkinter import *
-# Create the main window
-window = tk.Tk()
-window.title("Final Grade Calculator")
 
-#Create a frame
-frame1 = Frame(window)
-frame2 = Frame(window)
-frame3 = Frame(window)
-frame4 = Frame(window)
-frame5 = Frame(window)
-# Create a list to store the grades and weights
-grades = []
+#window
+window = Tk()
+window.title("Swift Grade Calculator")
+window.geometry('700x400')
+
+#frames
+head = Frame(window, width = 100, height = 100)
+head.pack()
+
+buttons = Frame(window, width = 100, height = 100)
+buttons.pack(pady = 30)
+
+#list
+names = []
+gradesNum = []
+gradesDen = []
 weights = []
-weight_labels = []
-# Create a function to add a new assignment
-def add_assignment():
-    # Create a new window for the user to input the grade and weight
-    new_window = tk.Toplevel(window)
-    new_window.title("New Assignment")
+categoriesLabel = []
 
-    # Create labels and entry boxes for the grade, weight, and name
-    grade_label = tk.Label(new_window, text="Grade(%):")
-    grade_label.grid(row=0, column=0)
-    grade_entry = tk.Entry(new_window)
-    grade_entry.grid(row=0, column=1)
+#labels and buttons
+title = Label(head, text="Swift Grade Calculator")
+title.pack()
+info = Label(head, text = "Welcome to Swift Grade Calculator.\nWith this calculator, you will be able to add categories and add assignments in the categories.\nThis will help be able to calculate your grades easier.")
+info.pack()
+def addCategory():
+    #window
+    categoryWindow = Toplevel(window)
+    categoryWindow.title("Add Category")
+    categoryWindow.geometry('800x200')
+    #labels, buttons, and entries
+    title = Label(categoryWindow, text="Swift Grade Calculator\nThe place to swiftly calculate your grades")
+    title.grid(column = 2, row = 0)
 
-    weight_label = tk.Label(new_window, text="Weight(%):")
-    weight_label.grid(row=1, column=0)
-    weight_entry = tk.Entry(new_window)
-    weight_entry.grid(row=1, column=1)
+    gradeNumLabel = Label(categoryWindow, text = "Please input grade total numerator:")
+    gradeNumLabel.grid(column = 0, row = 2)
 
-    name_label = tk.Label(new_window, text="Category Name:")
-    name_label.grid(row=2, column=0)
-    name_entry = tk.Entry(new_window)
-    name_entry.grid(row=2, column=1)
-    # Create a function to add the grade and weight to the list
-    def add_grade():
-        global window
-        global frame3
-        global grade_label
-        global weight_label
-        try:
-            grade = float(grade_entry.get())
-            weight = float(weight_entry.get())
-        except ValueError:
-            mb.showerror("Error!", "Please input a number!")
-        grades.append(grade)
-        weights.append(weight)
-        new_window.destroy()
-        grade_label = tk.Label(frame3, text=f"Grade: {grade}")
-        grade_label.pack(side=LEFT)
-        frame3.pack()
-        weight_label = tk.Label(frame3, text=f"Weight: {weight}")
-        weight_label.pack(side=LEFT)
-        frame3.pack()
-    # Create a button to add the grade and weight
-    add_button = tk.Button(new_window, text="Add", command=add_grade)
-    add_button.grid(row=3, column=0, columnspan=2)
+    gradeNumEntry = Entry(categoryWindow, width = 10)
+    gradeNumEntry.grid(column = 1, row = 2)
 
-# Create a function to calculate the final grade
-def calculate_grade():
-    # Create global variables
-    global final_grade
-    global result_label
-    # Calculate the total weight
-    total_weight = sum(weights)
+    gradeDenLabel = Label(categoryWindow, text = "Denominator:")
+    gradeDenLabel.grid(column = 2, row = 2)
 
-    # Calculate the weighted average of the grades
-    weighted_grades = [grade * weight for grade, weight in zip(grades, weights)]
-    total_weighted_grades = sum(weighted_grades)
-    final_grade = total_weighted_grades / total_weight
+    gradeDenEntry = Entry(categoryWindow, width =10)
+    gradeDenEntry.grid(column = 3, row = 2)
 
-    # Create a label to display the final grade
-    result_label = tk.Label(frame5, text=f"Final Grade: {final_grade:.2f}")
-    frame5.pack()
-    result_label.pack(side=LEFT)
-# Create a function to erase the data
-def erase_grade():
-    #Create Global Variables
-    global final_grade
-    global result_label
-    global grade_label
-    global weight_label
-    #Clear data
-    grades.clear()
-    weights.clear()
-    mb.showinfo("Information", "Your grades have been cleared")
-    final_grade= None
-    result_label.destroy()
-    grade_label.destroy()
-    weight_label.destroy()
+    weightLabel = Label(categoryWindow, text = "Please input weight as a percentage:")
+    weightLabel.grid(column = 0, row = 3)
+
+    weightEntry = Entry(categoryWindow, width = 10)
+    weightEntry.grid(column = 1, row = 3)
+
+    nameLabel = Label(categoryWindow, text = "Please input the category's name:")
+    nameLabel.grid(column = 0, row = 4)
+
+    nameEntry = Entry(categoryWindow, width = 10)
+    nameEntry.grid(column = 1, row = 4)
     
-# Create labels and buttons for adding assignments and calculating the final grade
-info_label = tk.Label(frame1, text = "Welcome to Swift Grade Calculator. Please add your categories by clicking on 'add a catageory'.")
-frame1.pack()
-info_label.pack(side=LEFT)
-add_label = tk.Label(frame2, text="Add a category:")
-frame2.pack()
-add_label.pack(side=LEFT)
-add_button = tk.Button(frame2, text="+", command=add_assignment, width = 10, height = 1)
-frame2.pack()
-add_button.pack(side=LEFT)
+    def submitCategory():
+        try:
+            gradeNum = float(gradeNumEntry.get())
+            gradeDen = float(gradeDenEntry.get())
+            weight = float(weightEntry.get())
+            name = str(nameEntry.get())
+        except ValueError:
+            mb.showerror("Error!", "Please input the appriorate data type")
+        gradesNum.append(gradeNum)
+        gradesDen.append(gradeDen)
+        weights.append(weight)
+        names.append(name)
+        categoryWindow.destroy()
+        categoryLabel = Label(head, text = f"Category Name: {name}      Grade: {gradeNum}/{gradeDen}      Weight: {weight}")
+        categoryLabel.pack()
+        categoriesLabel.append(categoryLabel)
+    
+    submit = Button(categoryWindow, text = "Submit", command = submitCategory)
+    submit.grid(column = 2, row = 5)
 
-calculate_button = tk.Button(frame3, text="Calculate Final Grade", command=calculate_grade, width = 20, height = 1)
-frame3.pack()
-calculate_button.pack(side=LEFT)
-erase_button = tk.Button(frame4, text="Clear", command=erase_grade, width = 20, height =1)
-frame4.pack()
-erase_button.pack(side=LEFT)
-final_grade = None
-result_label = tk.Label(frame5, text=" ")
-frame5.pack()
-result_label.pack(side=LEFT)
-grade_label = tk.Label(frame3, text=" ")
-frame3.pack()
-grade_label.pack(side=LEFT)
-weight_label = tk.Label(frame3, text=" ")
-frame3.pack()
-weight_label.pack(side=LEFT)
-# Start the main event loop
+category = Button(buttons, text = "Add Category", command = addCategory)
+category.pack(side='left', expand = True)
+
+def addAssignment():
+    #window
+    assignmentWindow = Toplevel(window)
+    assignmentWindow.title("Add Assignment")
+    assignmentWindow.geometry('900x200')
+    title = Label(assignmentWindow, text="Swift Grade Calculator\n(Make sure to type the category correctly as it is case sensitive)")
+    title.grid(column = 1, row = 0)
+
+    assignmentNumLabel = Label(assignmentWindow, text = "Please input Assignment Grade numerator:")
+    assignmentNumLabel.grid(column = 0, row = 1)
+
+    assignmentNumEntry = Entry(assignmentWindow, width = 10)
+    assignmentNumEntry.grid(column = 1, row = 1)
+
+    assignmentDenLabel = Label(assignmentWindow, text = "Denominator:")
+    assignmentDenLabel.grid(column = 2, row = 1)
+
+    assignmentDenEntry = Entry(assignmentWindow, width = 10)
+    assignmentDenEntry.grid(column = 3, row = 1)
+
+    assignmentCategory = Label(assignmentWindow, text = "What category is this assignment in?")
+    assignmentCategory.grid(column = 0, row = 2)
+
+    categoryEntry = Entry(assignmentWindow, width = 10)
+    categoryEntry.grid(column = 1, row = 2)
+
+    def submitAssignment():
+        #find the category in names and determine the grade for that category
+        try:
+            assignmentNum = float(assignmentNumEntry.get())
+            assignmentDen = float(assignmentDenEntry.get())
+        except ValueError:
+            mb.showerror("Error!", "Please input the appriorate data type")
+        if str(categoryEntry.get()) in names:
+            index = names.index(str(categoryEntry.get()))
+            gradeNum = gradesNum[index]
+            gradeDen = gradesDen[index]
+            name = names[index]
+            weight = weights[index]
+            gradeNum = assignmentNum + gradeNum
+            gradesNum[index] = gradeNum
+            gradeDen = assignmentDen + gradeDen
+            gradesDen[index] = gradeDen
+            categoryLabel = categoriesLabel[index]
+            categoryLabel.config(text= f"Category Name: {name}      Grade: {gradeNum}/{gradeDen}      Weight: {weight}")
+        else: 
+            mb.showerror("Error!" "This category does not exist")       
+        assignmentWindow.destroy()
+
+    assignmentButton = Button(assignmentWindow, text="Submit", command = submitAssignment)
+    assignmentButton.grid(column = 1, row = 3)
+
+assignment = Button(buttons, text = "Add Assignment", command = addAssignment)
+assignment.pack(side='left', expand = True)
+
+
+
+def calculateGrade():
+    totalWeight = 0
+    totalPoint = 0
+    for weight in weights:
+        totalWeight += weight
+    for gradeNum, gradeDen, weight in zip(gradesNum, gradesDen, weights):
+        totalPoint += (gradeNum/gradeDen)*weight 
+        grade = round(totalPoint, 2)
+    if totalWeight != 100:
+        mb.showerror("Error!", f"The sum of the weights does not equal to 100. The total weight is {totalWeight}. ")
+    elif totalPoint < 0:
+        mb.showerror("Error!", "Grade cannot be negative")
+    else:
+        result = Label(head, text = f"Grade: {grade}")
+        result.pack()
+
+
+calculate = Button(buttons, text="Calculate Overall Grade", command = calculateGrade)
+calculate.pack(side='left', expand = True)
+
+
 window.mainloop()
